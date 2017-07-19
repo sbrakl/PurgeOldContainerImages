@@ -32,4 +32,8 @@ def RemoveContainerImage(short_image_ID):
     for img in conimages:
         if img.short_id == short_image_ID:
             print "Removing Container " + img.short_id
-            client.images.remove(img.id)
+	    try:
+            	client.images.remove(img.id)
+	    except Exception as e:
+		print e.__doc__
+		print e.message
