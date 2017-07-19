@@ -42,7 +42,7 @@ for img in imagesWithMoreThanNthVersion:
     print ImagesToRemove
     # Getting images ID's
     ImageIds = ImagesToRemove[:, 2]
-    if not whatif == True:
+    if not whatif == "True":
         # Removing Images
         for imgId in ImageIds:
             dockerhelper.RemoveContainerImage(imgId)
