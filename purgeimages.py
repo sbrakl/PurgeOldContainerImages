@@ -5,6 +5,7 @@ import dockerhelper
 import logging
 
 parser = argparse.ArgumentParser()
+parser.add_argument('--Environment', help="Environment i.e. dev, uat or live", default='local')
 parser.add_argument('--Keep', help="Number of containers to keep per service", default=3)
 parser.add_argument('--WhatIf', help="Will not remove containers, would just notify what it would be deleting", default=False)
 args = parser.parse_args()
@@ -14,10 +15,12 @@ logger = logging.getLogger(__name__)
 
 numOfContainersToKeep = int(args.Keep)
 whatif = args.WhatIf
+env = args.Environment
 
 print "### Args received, Keep: ", numOfContainersToKeep, ", WhatIf: ", whatif
 
-conImageList = dockerhelper.GetListOfImages()
+objdockerhelper = dockerhelper.DockerHelper(env)
+conImageList = objdockerhelper.GetListOfImages()
 
 # Slice multi dimension list to extract just imageName
 npArr  = np.array(conImageList)
@@ -57,7 +60,7 @@ for img in imagesWithMoreThanNthVersion:
     if not whatif == "True":
         # Removing Images
         for imgId in ImageIds:
-            dockerhelper.RemoveContainerImage(imgId)
+            objdockerhelper.RemoveContainerImage(imgId)
     else:
         print "### WHATIF flag found, won't be deleting the container "
 
